@@ -7,8 +7,11 @@
 {% endblock %}
 
 {% block content %}
+{% set errors = data['allowance-errors'] or {} %}
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
+
+    {% include "internal/v1/dsa/_allowance-errors.html" %}
 
     <span class="nhsuk-caption-l">John Mark BRN0000147</span>
     <h1 class="nhsuk-heading-l">Travel allowance details</h1>
@@ -16,20 +19,22 @@
 
     <form method="post" novalidate>
 
-      <div class="nhsuk-form-group">
+      <div class="nhsuk-form-group{% if errors['travel-amount'] %} nhsuk-form-group--error{% endif %}">
         <label class="nhsuk-label" for="travel-amount">Approved amount</label>
         <div class="nhsuk-hint" id="travel-amount-hint">For example, £500 or £500.50</div>
+        {% if errors['travel-amount'] %}<span class="nhsuk-error-message" id="travel-amount-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['travel-amount'] }}</span>{% endif %}
         <div class="nhsuk-input-wrapper">
           <div class="nhsuk-input__prefix" aria-hidden="true">£</div>
-          <input class="nhsuk-input nhsuk-input--width-10" id="travel-amount" name="travel-amount" type="text" inputmode="decimal" spellcheck="false" aria-describedby="travel-amount-hint" value="{{ data['travel-amount'] }}">
+          <input class="nhsuk-input{% if errors['travel-amount'] %} nhsuk-input--error{% endif %} nhsuk-input--width-10" id="travel-amount" name="travel-amount" type="text" inputmode="decimal" spellcheck="false" aria-describedby="travel-amount-hint{% if errors['travel-amount'] %} travel-amount-error{% endif %}" value="{{ data['travel-amount'] }}">
         </div>
       </div>
 
-      <div class="nhsuk-form-group">
+      <div class="nhsuk-form-group{% if errors['travel-journeys'] %} nhsuk-form-group--error{% endif %}">
         <label class="nhsuk-label" for="travel-journeys">Approved number of journeys</label>
         <div class="nhsuk-hint" id="travel-journeys-hint">As shown in the needs assessment report.</div>
+        {% if errors['travel-journeys'] %}<span class="nhsuk-error-message" id="travel-journeys-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['travel-journeys'] }}</span>{% endif %}
         <div class="nhsuk-input-wrapper">
-          <input class="nhsuk-input nhsuk-input--width-5" id="travel-journeys" name="travel-journeys" type="text" inputmode="numeric" spellcheck="false" aria-describedby="travel-journeys-hint" value="{{ data['travel-journeys'] }}">
+          <input class="nhsuk-input{% if errors['travel-journeys'] %} nhsuk-input--error{% endif %} nhsuk-input--width-5" id="travel-journeys" name="travel-journeys" type="text" inputmode="numeric" spellcheck="false" aria-describedby="travel-journeys-hint{% if errors['travel-journeys'] %} travel-journeys-error{% endif %}" value="{{ data['travel-journeys'] }}">
           <div class="nhsuk-input__suffix" aria-hidden="true">journeys</div>
         </div>
       </div>

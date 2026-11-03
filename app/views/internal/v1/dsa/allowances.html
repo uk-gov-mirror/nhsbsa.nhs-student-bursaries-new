@@ -16,6 +16,10 @@
     <h1 class="nhsuk-heading-l">DSA allowances</h1>
     <p>You have added {{ rows | length }} allowance{{ 's' if rows | length != 1 }} for this student.</p>
 
+    <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Evidence from the student</h2>
+    <p class="nhsuk-hint nhsuk-u-margin-bottom-2">Open the needs assessment report to check the amounts.</p>
+    <div class="nhsuk-u-margin-bottom-6">{% include "internal/v1/dsa/_evidence.html" %}</div>
+
     <table class="nhsuk-table">
       <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Allowances added</caption>
       <thead class="nhsuk-table__head">
@@ -24,9 +28,6 @@
           <th class="nhsuk-table__header" scope="col">Details</th>
           <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Approved amount</th>
           <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Hours or journeys</th>
-          <!--
-          <th class="nhsuk-table__header" scope="col"><span class="nhsuk-u-visually-hidden">Actions</span></th>
-          -->
           <th class="nhsuk-table__header" scope="col">Actions</th>
         </tr>
       </thead>

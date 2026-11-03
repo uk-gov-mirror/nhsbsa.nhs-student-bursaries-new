@@ -55,6 +55,8 @@ function money (value) {
 
 function clearFields (data) {
   FIELDS.forEach(f => { delete data[f]; });
+  delete data['allowance-error-list'];
+  delete data['allowance-errors'];
 }
 
 // Build one allowance from the answers on the current pages
@@ -123,6 +125,8 @@ router.post('/dsa/summary', (req, res) => {
 // Approve on the DSA summary: start adding allowances
 router.get('/dsa/add-allowances', (req, res) => {
   clearFields(req.session.data);
+  delete req.session.data['allowance-error-list'];
+  delete req.session.data['allowance-errors'];
   delete req.session.data['edit-index'];
   res.render('internal/v1/dsa/add-allowances');
 });
@@ -130,6 +134,8 @@ router.get('/dsa/add-allowances', (req, res) => {
 // What type of allowance is this? -> next page depends on the answer
 router.post('/dsa/allowance-type', (req, res) => {
   const type = req.session.data['allowance-type'];
+  delete req.session.data['allowance-error-list'];
+  delete req.session.data['allowance-errors'];
 
   if (!type) {
     return res.redirect(base + '/allowance-type');
@@ -143,17 +149,64 @@ router.post('/dsa/allowance-type', (req, res) => {
   res.redirect(base + '/allowance-amount');
 });
 
+// Check the answers on an allowance page. Returns a list of errors (empty if all fine).
+function allowanceErrors (data, page) {
+  const errors = [];
+  if (page === 'amount') {
+    if (num(data['allowance-amount']) <= 0) {
+      errors.push({ field: 'allowance-amount', text: 'Enter an amount more than £0' });
+    }
+  }
+  if (page === 'nmh') {
+    if (!String(data['nmh-service'] || '').trim()) {
+      errors.push({ field: 'nmh-service', text: 'Enter the service' });
+    }
+    if (num(data['nmh-hours']) <= 0) {
+      errors.push({ field: 'nmh-hours', text: 'Enter the approved hours' });
+    }
+    if (num(data['nmh-amount']) <= 0) {
+      errors.push({ field: 'nmh-amount', text: 'Enter an amount more than £0' });
+    }
+  }
+  if (page === 'travel') {
+    if (num(data['travel-amount']) <= 0) {
+      errors.push({ field: 'travel-amount', text: 'Enter an amount more than £0' });
+    }
+    if (num(data['travel-journeys']) <= 0) {
+      errors.push({ field: 'travel-journeys', text: 'Enter the approved number of journeys' });
+    }
+  }
+  return errors;
+}
+
+// Store the errors so the page can show them: a list for the error summary,
+// and one message per field for the inline errors
+function checkAllowancePage (req, res, page, path) {
+  const data = req.session.data;
+  const errors = allowanceErrors(data, page);
+
+  if (errors.length) {
+    data['allowance-error-list'] = errors;
+    data['allowance-errors'] = {};
+    errors.forEach(e => { data['allowance-errors'][e.field] = e.text; });
+    return res.redirect(base + path);
+  }
+  delete data['allowance-error-list'];
+  delete data['allowance-errors'];
+  res.redirect(base + '/check-allowance');
+}
+
 // Amount, NMH details and travel details all go to the check page
 router.post('/dsa/allowance-amount', (req, res) => {
-  res.redirect(base + '/check-allowance');
+  checkAllowancePage(req, res, 'amount', '/allowance-amount');
 });
 
 router.post('/dsa/nmh-details', (req, res) => {
-  res.redirect(base + '/check-allowance');
+  checkAllowancePage(req, res, 'nmh', '/nmh-details');
 });
 
 router.post('/dsa/travel-details', (req, res) => {
-  res.redirect(base + '/check-allowance');
+  checkAllowancePage(req, res, 'travel', '/travel-details');
 });
 
 // Check allowance details

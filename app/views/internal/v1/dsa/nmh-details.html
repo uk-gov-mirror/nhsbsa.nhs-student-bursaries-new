@@ -7,8 +7,11 @@
 {% endblock %}
 
 {% block content %}
+{% set errors = data['allowance-errors'] or {} %}
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
+
+    {% include "internal/v1/dsa/_allowance-errors.html" %}
 
     <span class="nhsuk-caption-l">John Mark BRN0000147</span>
     <h1 class="nhsuk-heading-l">Non-medical helper details</h1>
@@ -16,10 +19,11 @@
 
     <form method="post" novalidate>
 
-      <div class="nhsuk-form-group">
+      <div class="nhsuk-form-group{% if errors['nmh-service'] %} nhsuk-form-group--error{% endif %}">
         <label class="nhsuk-label" for="nmh-service">Service</label>
         <div class="nhsuk-hint" id="nmh-service-hint">For example, specialist one-to-one study skills or assistive technology training.</div>
-        <input class="nhsuk-input" id="nmh-service" name="nmh-service" type="text" aria-describedby="nmh-service-hint" value="{{ data['nmh-service'] }}">
+        {% if errors['nmh-service'] %}<span class="nhsuk-error-message" id="nmh-service-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['nmh-service'] }}</span>{% endif %}
+        <input class="nhsuk-input" id="nmh-service" name="nmh-service" type="text" aria-describedby="nmh-service-hint{% if errors['nmh-service'] %} nmh-service-error{% endif %}" value="{{ data['nmh-service'] }}">
       </div>
 
       <div class="nhsuk-form-group">
@@ -27,20 +31,22 @@
         <input class="nhsuk-input" id="nmh-provider" name="nmh-provider" type="text" value="{{ data['nmh-provider'] }}">
       </div>
 
-      <div class="nhsuk-form-group">
+      <div class="nhsuk-form-group{% if errors['nmh-hours'] %} nhsuk-form-group--error{% endif %}">
         <label class="nhsuk-label" for="nmh-hours">Approved hours</label>
+        {% if errors['nmh-hours'] %}<span class="nhsuk-error-message" id="nmh-hours-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['nmh-hours'] }}</span>{% endif %}
         <div class="nhsuk-input-wrapper">
-          <input class="nhsuk-input nhsuk-input--width-5" id="nmh-hours" name="nmh-hours" type="text" inputmode="numeric" spellcheck="false" value="{{ data['nmh-hours'] }}">
+          <input class="nhsuk-input{% if errors['nmh-hours'] %} nhsuk-input--error{% endif %} nhsuk-input--width-5" id="nmh-hours" name="nmh-hours" type="text"{% if errors['nmh-hours'] %} aria-describedby="nmh-hours-error"{% endif %} inputmode="numeric" spellcheck="false" value="{{ data['nmh-hours'] }}">
           <div class="nhsuk-input__suffix" aria-hidden="true">hours</div>
         </div>
       </div>
 
-      <div class="nhsuk-form-group">
+      <div class="nhsuk-form-group{% if errors['nmh-amount'] %} nhsuk-form-group--error{% endif %}">
         <label class="nhsuk-label" for="nmh-amount">Approved amount</label>
         <div class="nhsuk-hint" id="nmh-amount-hint">The total approved for this service, for example £150 or £150.50</div>
+        {% if errors['nmh-amount'] %}<span class="nhsuk-error-message" id="nmh-amount-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['nmh-amount'] }}</span>{% endif %}
         <div class="nhsuk-input-wrapper">
           <div class="nhsuk-input__prefix" aria-hidden="true">£</div>
-          <input class="nhsuk-input nhsuk-input--width-10" id="nmh-amount" name="nmh-amount" type="text" inputmode="decimal" spellcheck="false" aria-describedby="nmh-amount-hint" value="{{ data['nmh-amount'] }}">
+          <input class="nhsuk-input{% if errors['nmh-amount'] %} nhsuk-input--error{% endif %} nhsuk-input--width-10" id="nmh-amount" name="nmh-amount" type="text" inputmode="decimal" spellcheck="false" aria-describedby="nmh-amount-hint{% if errors['nmh-amount'] %} nmh-amount-error{% endif %}" value="{{ data['nmh-amount'] }}">
         </div>
       </div>
 
