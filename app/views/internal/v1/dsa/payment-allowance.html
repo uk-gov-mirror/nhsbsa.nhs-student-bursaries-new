@@ -1,0 +1,54 @@
+{% extends "layout-internal.html" %}
+
+{% set pageName = "Which allowance is this payment for?" %}
+{% set errors = data['pay-errors'] or {} %}
+{% set fromEmail = data['pay-source'] == 'email' %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="{{ '/internal/v1/student-details#tab-dsa' if fromEmail else '/internal/v1/dsa/receipts' }}">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    {% include "internal/v1/dsa/_payment-errors.html" %}
+
+    <form method="post" novalidate>
+      <div class="nhsuk-form-group{% if errors['pay-allowance'] %} nhsuk-form-group--error{% endif %}">
+        <fieldset class="nhsuk-fieldset" aria-describedby="pay-allowance-hint{% if errors['pay-allowance'] %} pay-allowance-error{% endif %}">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+            <h1 class="nhsuk-fieldset__heading">
+              <span class="nhsuk-caption-l">John Mark BRN0000089<span class="nhsuk-u-visually-hidden"> - </span></span>
+              Which allowance is this payment for?
+            </h1>
+          </legend>
+          <div class="nhsuk-hint" id="pay-allowance-hint">
+            {% if fromEmail %}
+              Only add payments here for invoices sent to the DSA inbox. Receipts the student uploads are paid from the Activities tab.
+            {% else %}
+              The student has uploaded a receipt for an ink cartridge for printer, £25.00.
+            {% endif %}
+          </div>
+          {% if errors['pay-allowance'] %}
+          <span class="nhsuk-error-message" id="pay-allowance-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-allowance'] }}</span>
+          {% endif %}
+          <div class="nhsuk-radios">
+            {% for row in rows %}
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="pay-allowance-{{ row.index }}" name="pay-allowance" type="radio" value="{{ row.index }}"{% if data['pay-allowance'] == row.index | string %} checked{% endif %}>
+              <label class="nhsuk-label nhsuk-radios__label" for="pay-allowance-{{ row.index }}">{{ row.name }}</label>
+            </div>
+            {% endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      <button class="nhsuk-button" type="submit" data-module="nhsuk-button">Continue</button>
+    </form>
+
+    <p><a href="/internal/v1/student-details">Cancel</a></p>
+
+  </div>
+</div>
+{% endblock %}

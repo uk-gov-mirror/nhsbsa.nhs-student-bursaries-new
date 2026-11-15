@@ -1,0 +1,44 @@
+{% extends "layout-internal.html" %}
+
+{% set pageName = "There is no allowance to pay this from" %}
+{% set fromEmail = data['pay-source'] == 'email' %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="{{ '/internal/v1/student-details#tab-dsa' if fromEmail else '/internal/v1/dsa/receipts' }}">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      <span class="nhsuk-caption-l">John Mark BRN0000089<span class="nhsuk-u-visually-hidden"> - </span></span>
+      There is no allowance to pay this from
+    </h1>
+
+    <p>John Mark has no DSA allowances set up, so you cannot add this payment yet.</p>
+
+    <p>DSA can only pay for things that are approved in the student's needs assessment report.</p>
+
+    <h2 class="nhsuk-heading-m">What you can do</h2>
+
+    <h3 class="nhsuk-heading-s">If the needs assessment report includes this</h3>
+    <p>Set up the allowances first, then add the payment.</p>
+    <a href="/internal/v1/dsa/summary" class="nhsuk-button" data-module="nhsuk-button">Go to the DSA needs assessment</a>
+
+    <h3 class="nhsuk-heading-s">If DSA cannot pay for this</h3>
+    {% if fromEmail %}
+      <p>Do not pay the invoice. Reply to the provider to explain why, and add a note to the student record.</p>
+      <p><a href="/internal/v1/student-details#tab-2">Go to the Notes tab</a></p>
+    {% else %}
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li><a href="/internal/v1/dsa/receipt-email?type=more-info">Ask the student for more information</a></li>
+        <li><a href="/internal/v1/dsa/receipt-email?type=reject">Reject the receipt</a></li>
+      </ul>
+    {% endif %}
+
+    <p><a href="/internal/v1/student-details">Return to student record</a></p>
+
+  </div>
+</div>
+{% endblock %}

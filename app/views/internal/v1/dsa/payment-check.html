@@ -1,0 +1,162 @@
+{% extends "layout-internal.html" %}
+
+{% set pageName = "Check the payment details" %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="/internal/v1/dsa/payment-details">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      <span class="nhsuk-caption-l">John Mark BRN0000089<span class="nhsuk-u-visually-hidden"> - </span></span>
+      Check the payment details
+    </h1>
+
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Allowance</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.allowanceName }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-allowance">Change<span class="nhsuk-u-visually-hidden"> allowance</span></a>
+        </dd>
+      </div>
+      {% if p.source == 'receipt' %}
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Payment type</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.paymentType }}, one off payment</dd>
+      </div>
+      {% else %}
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Invoice from</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.from }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-from">Change<span class="nhsuk-u-visually-hidden"> who sent the invoice</span></a>
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Date received</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.receivedDate }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-date-day">Change<span class="nhsuk-u-visually-hidden"> date received</span></a>
+        </dd>
+      </div>
+      {% endif %}
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">{{ "Invoice number" if p.source == 'email' else "Invoice or receipt number" }}</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.invoice }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-invoice">Change<span class="nhsuk-u-visually-hidden"> invoice number</span></a>
+        </dd>
+      </div>
+      {% if p.hours %}
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Hours</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.unitsText }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-hours">Change<span class="nhsuk-u-visually-hidden"> hours</span></a>
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Missed session</dt>
+        <dd class="nhsuk-summary-list__value">{% if p.missed == 'yes' %}Yes. This will be {{ a.missedThisTerm + 1 }} of {{ limit }} this term.{% else %}No{% endif %}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-missed-yes">Change<span class="nhsuk-u-visually-hidden"> missed session</span></a>
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Amount</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.amountText }}</dd>
+      </div>
+      {% else %}
+      {% if p.journeys %}
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Journeys taken</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.unitsText }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-journeys">Change<span class="nhsuk-u-visually-hidden"> journeys taken</span></a>
+        </dd>
+      </div>
+      {% endif %}
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Amount</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.amountText }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-amount">Change<span class="nhsuk-u-visually-hidden"> amount</span></a>
+        </dd>
+      </div>
+      {% endif %}
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">What it's for</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.whatFor }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-for">Change<span class="nhsuk-u-visually-hidden"> what the payment is for</span></a>
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Source</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.sourceText }}</dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Paid to</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.paidTo }}</dd>
+      </div>
+      {% if p.source == 'email' %}
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Integra supplier reference</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.integra }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-details#pay-integra">Change<span class="nhsuk-u-visually-hidden"> Integra supplier reference</span></a>
+        </dd>
+      </div>
+      {% endif %}
+    </dl>
+
+    <table class="nhsuk-table">
+      <caption class="nhsuk-table__caption nhsuk-table__caption--m">Allowance after this payment</caption>
+      <thead class="nhsuk-table__head">
+        <tr class="nhsuk-table__row">
+          <th class="nhsuk-table__header" scope="col"><span class="nhsuk-u-visually-hidden">Item</span></th>
+          <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Before</th>
+          <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">This payment</th>
+          <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">After</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr class="nhsuk-table__row">
+          <th class="nhsuk-table__header" scope="row">Amount left</th>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ a.leftDisplay }}</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ p.amountDisplay }}</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ after.left }}</td>
+        </tr>
+        {% if after.unitsLabel %}
+        <tr class="nhsuk-table__row">
+          <th class="nhsuk-table__header" scope="row">{{ after.unitsLabel }}</th>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ after.unitsBefore }}</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ after.unitsThis }}</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ after.unitsAfter }}</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <div class="nhsuk-inset-text">
+      <span class="nhsuk-u-visually-hidden">Information: </span>
+      {% if p.source == 'email' %}
+      <p>You still need to pay this invoice in Integra. Adding it here takes it off the allowance and replaces the spreadsheet.</p>
+      {% else %}
+      <p>The payment will be made in the next payment run. It will be taken off the allowance straight away.</p>
+      {% endif %}
+    </div>
+
+    <form method="post" novalidate>
+      <button class="nhsuk-button" type="submit" data-module="nhsuk-button">Add payment</button>
+    </form>
+
+    <p><a href="/internal/v1/student-details">Cancel</a></p>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "layout-internal.html" %}
+
+{% set isReject = data['type'] == 'reject' %}
+{% set pageName = "Reject receipt" if isReject else "Ask for more information" %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="/internal/v1/dsa/receipts">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      <span class="nhsuk-caption-l">John Mark BRN0000089<span class="nhsuk-u-visually-hidden"> - </span></span>
+      {{ pageName }}
+    </h1>
+
+    <form method="post" novalidate>
+
+      <p>Dear student,</p>
+
+      <div class="nhsuk-form-group nhsuk-character-count" data-module="nhsuk-character-count" data-maxlength="2000">
+        <label class="nhsuk-label" for="receipt-message">Message to the student</label>
+        <div class="nhsuk-hint" id="receipt-message-hint">
+          {% if isReject %}
+            Explain why DSA cannot pay for this receipt.
+          {% else %}
+            Explain what you need from the student, for example a clearer copy of the receipt.
+          {% endif %}
+          This appears after "Dear student" in the email.
+        </div>
+        <textarea class="nhsuk-textarea nhsuk-js-character-count" id="receipt-message" name="receipt-message" rows="8" aria-describedby="receipt-message-hint receipt-message-info"></textarea>
+        <div class="nhsuk-hint nhsuk-character-count__message" id="receipt-message-info">You can enter up to 2000 characters</div>
+      </div>
+
+      <p>If you have any general queries about the NHS Student Bursary, please use our online enquiry system <a href="https://faq.nhsbsa.nhs.uk/knowledgebase/category/?articlecategory=NHS%20Bursary&amp;id=CAT-05069&amp;parentid=" target="_blank" rel="noopener noreferrer">'Ask Us' (opens in new tab)</a> which is available 24 hours a day, 7 days a week. If you cannot find the answer you require, you can contact us using the details below:</p>
+
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>Telephone: 0300 330 1345</li>
+        <li>Text relay service: 18001 0300 330 1345</li>
+        <li>Twitter: <a href="https://www.twitter.com/NHSBSA_Students" target="_blank" rel="noopener noreferrer">@NHSBSA_Students (opens in new tab)</a></li>
+        <li>Facebook: <a href="https://www.facebook.com/NHSstudentbursaries" target="_blank" rel="noopener noreferrer">NHSstudentbursaries (opens in new tab)</a></li>
+      </ul>
+
+      <p class="nhsuk-u-margin-top-5">Yours sincerely,</p>
+      <p class="nhsuk-u-margin-bottom-1">Student Services</p>
+      <p>NHS Business Services Authority</p>
+
+      <button class="nhsuk-button" type="submit" data-module="nhsuk-button">Send email</button>
+
+      <p><a href="/internal/v1/dsa/receipts">Cancel and go back to the receipt</a></p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "layout-internal.html" %}
+
+{% set pageName = "Payment details" %}
+{% set errors = data['pay-errors'] or {} %}
+{% set fromEmail = data['pay-source'] == 'email' %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="/internal/v1/dsa/payment-allowance">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    {% include "internal/v1/dsa/_payment-errors.html" %}
+
+    <h1 class="nhsuk-heading-l">
+      <span class="nhsuk-caption-l">John Mark BRN0000089<span class="nhsuk-u-visually-hidden"> - </span></span>
+      Payment details
+    </h1>
+
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Allowance</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.name }}</dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="/internal/v1/dsa/payment-allowance">Change<span class="nhsuk-u-visually-hidden"> allowance</span></a>
+        </dd>
+      </div>
+      {% if a.hours %}
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Hourly rate</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.rateDisplay }}</dd>
+      </div>
+      {% endif %}
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Left in this allowance</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.leftSummary }}</dd>
+      </div>
+    </dl>
+
+    <form method="post" novalidate>
+
+      {% if fromEmail %}
+      <div class="nhsuk-form-group{% if errors['pay-from'] %} nhsuk-form-group--error{% endif %}">
+        <label class="nhsuk-label nhsuk-label--s" for="pay-from">Who sent the invoice?</label>
+        <div class="nhsuk-hint" id="pay-from-hint">The company or person named on the invoice</div>
+        {% if errors['pay-from'] %}<span class="nhsuk-error-message" id="pay-from-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-from'] }}</span>{% endif %}
+        <input class="nhsuk-input{% if errors['pay-from'] %} nhsuk-input--error{% endif %}" id="pay-from" name="pay-from" type="text" spellcheck="false" aria-describedby="pay-from-hint{% if errors['pay-from'] %} pay-from-error{% endif %}" value="{{ data['pay-from'] if data['pay-from'] else (a.provider or '') }}">
+      </div>
+
+      <div class="nhsuk-form-group{% if errors['pay-date'] %} nhsuk-form-group--error{% endif %}">
+        <fieldset class="nhsuk-fieldset" role="group" aria-describedby="pay-date-hint{% if errors['pay-date'] %} pay-date-error{% endif %}">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">Date the invoice was received</legend>
+          <div class="nhsuk-hint" id="pay-date-hint">For example, 2 11 2026</div>
+          {% if errors['pay-date'] %}<span class="nhsuk-error-message" id="pay-date-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-date'] }}</span>{% endif %}
+          <div class="nhsuk-date-input" id="pay-date">
+            <div class="nhsuk-date-input__item">
+              <div class="nhsuk-form-group">
+                <label class="nhsuk-label nhsuk-date-input__label" for="pay-date-day">Day</label>
+                <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2{% if errors['pay-date'] %} nhsuk-input--error{% endif %}" id="pay-date-day" name="pay-date-day" type="text" inputmode="numeric" value="{{ data['pay-date-day'] }}">
+              </div>
+            </div>
+            <div class="nhsuk-date-input__item">
+              <div class="nhsuk-form-group">
+                <label class="nhsuk-label nhsuk-date-input__label" for="pay-date-month">Month</label>
+                <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2{% if errors['pay-date'] %} nhsuk-input--error{% endif %}" id="pay-date-month" name="pay-date-month" type="text" inputmode="numeric" value="{{ data['pay-date-month'] }}">
+              </div>
+            </div>
+            <div class="nhsuk-date-input__item">
+              <div class="nhsuk-form-group">
+                <label class="nhsuk-label nhsuk-date-input__label" for="pay-date-year">Year</label>
+                <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-4{% if errors['pay-date'] %} nhsuk-input--error{% endif %}" id="pay-date-year" name="pay-date-year" type="text" inputmode="numeric" value="{{ data['pay-date-year'] }}">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      {% endif %}
+
+      <div class="nhsuk-form-group{% if errors['pay-invoice'] %} nhsuk-form-group--error{% endif %}">
+        <label class="nhsuk-label nhsuk-label--s" for="pay-invoice">{{ "Invoice number" if fromEmail else "Invoice or receipt number" }}</label>
+        <div class="nhsuk-hint" id="pay-invoice-hint">{{ "As shown on the invoice" if fromEmail else "As shown on the receipt" }}</div>
+        {% if errors['pay-invoice'] %}<span class="nhsuk-error-message" id="pay-invoice-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-invoice'] }}</span>{% endif %}
+        <input class="nhsuk-input nhsuk-input--width-10{% if errors['pay-invoice'] %} nhsuk-input--error{% endif %}" id="pay-invoice" name="pay-invoice" type="text" spellcheck="false" aria-describedby="pay-invoice-hint{% if errors['pay-invoice'] %} pay-invoice-error{% endif %}" value="{{ data['pay-invoice'] }}">
+      </div>
+
+      {% if fromEmail %}
+      <div class="nhsuk-form-group{% if errors['pay-integra'] %} nhsuk-form-group--error{% endif %}">
+        <label class="nhsuk-label nhsuk-label--s" for="pay-integra">Integra supplier reference</label>
+        <div class="nhsuk-hint" id="pay-integra-hint">The provider's reference in Integra. If the provider is new, set them up in Integra first.</div>
+        {% if errors['pay-integra'] %}<span class="nhsuk-error-message" id="pay-integra-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-integra'] }}</span>{% endif %}
+        <input class="nhsuk-input nhsuk-input--width-10{% if errors['pay-integra'] %} nhsuk-input--error{% endif %}" id="pay-integra" name="pay-integra" type="text" spellcheck="false" aria-describedby="pay-integra-hint{% if errors['pay-integra'] %} pay-integra-error{% endif %}" value="{{ data['pay-integra'] }}">
+      </div>
+      {% endif %}
+
+      {% if a.hours %}
+
+      <div class="nhsuk-form-group{% if errors['pay-hours'] %} nhsuk-form-group--error{% endif %}">
+        <label class="nhsuk-label nhsuk-label--s" for="pay-hours">Hours</label>
+        <div class="nhsuk-hint" id="pay-hours-hint">You can use part hours. For example, 0.75 or 1.5.</div>
+        {% if errors['pay-hours'] %}<span class="nhsuk-error-message" id="pay-hours-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-hours'] }}</span>{% endif %}
+        <div class="nhsuk-input-wrapper">
+          <input class="nhsuk-input nhsuk-input--width-4{% if errors['pay-hours'] %} nhsuk-input--error{% endif %}" id="pay-hours" name="pay-hours" type="text" inputmode="decimal" spellcheck="false" aria-describedby="pay-hours-hint{% if errors['pay-hours'] %} pay-hours-error{% endif %}" value="{{ data['pay-hours'] }}">
+          <div class="nhsuk-input__suffix" aria-hidden="true">hours</div>
+        </div>
+      </div>
+
+      <div class="nhsuk-form-group{% if errors['pay-missed'] %} nhsuk-form-group--error{% endif %}">
+        <fieldset class="nhsuk-fieldset" aria-describedby="pay-missed-hint{% if errors['pay-missed'] %} pay-missed-error{% endif %}">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">Is this for a missed session?</legend>
+          <div class="nhsuk-hint" id="pay-missed-hint">Providers can be paid for up to {{ limit }} missed sessions a term. {{ a.missedThisTerm }} of {{ limit }} used this term ({{ term }}).</div>
+          {% if errors['pay-missed'] %}<span class="nhsuk-error-message" id="pay-missed-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-missed'] }}</span>{% endif %}
+          <div class="nhsuk-radios nhsuk-radios--inline">
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="pay-missed-yes" name="pay-missed" type="radio" value="yes"{% if data['pay-missed'] == 'yes' %} checked{% endif %}>
+              <label class="nhsuk-label nhsuk-radios__label" for="pay-missed-yes">Yes</label>
+            </div>
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="pay-missed-no" name="pay-missed" type="radio" value="no"{% if data['pay-missed'] == 'no' %} checked{% endif %}>
+              <label class="nhsuk-label nhsuk-radios__label" for="pay-missed-no">No</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information: </span>
+        <p>The amount is worked out for you: hours × {{ a.rateDisplay }}.</p>
+      </div>
+
+      {% else %}
+
+      {% if a.journeys %}
+      <div class="nhsuk-form-group{% if errors['pay-journeys'] %} nhsuk-form-group--error{% endif %}">
+        <label class="nhsuk-label nhsuk-label--s" for="pay-journeys">Journeys taken</label>
+        <div class="nhsuk-hint" id="pay-journeys-hint">Count each single journey. For example, there and back is 2 journeys.</div>
+        {% if errors['pay-journeys'] %}<span class="nhsuk-error-message" id="pay-journeys-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-journeys'] }}</span>{% endif %}
+        <div class="nhsuk-input-wrapper">
+          <input class="nhsuk-input nhsuk-input--width-4{% if errors['pay-journeys'] %} nhsuk-input--error{% endif %}" id="pay-journeys" name="pay-journeys" type="text" inputmode="numeric" spellcheck="false" aria-describedby="pay-journeys-hint{% if errors['pay-journeys'] %} pay-journeys-error{% endif %}" value="{{ data['pay-journeys'] }}">
+          <div class="nhsuk-input__suffix" aria-hidden="true">journeys</div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="nhsuk-form-group{% if errors['pay-amount'] %} nhsuk-form-group--error{% endif %}">
+        <label class="nhsuk-label nhsuk-label--s" for="pay-amount">Amount to pay</label>
+        <div class="nhsuk-hint" id="pay-amount-hint">For example, £25 or £25.50</div>
+        {% if errors['pay-amount'] %}<span class="nhsuk-error-message" id="pay-amount-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-amount'] }}</span>{% endif %}
+        <div class="nhsuk-input-wrapper">
+          <div class="nhsuk-input__prefix" aria-hidden="true">£</div>
+          <input class="nhsuk-input nhsuk-input--width-10{% if errors['pay-amount'] %} nhsuk-input--error{% endif %}" id="pay-amount" name="pay-amount" type="text" inputmode="decimal" spellcheck="false" aria-describedby="pay-amount-hint{% if errors['pay-amount'] %} pay-amount-error{% endif %}" value="{{ data['pay-amount'] }}">
+        </div>
+      </div>
+
+      {% endif %}
+
+      <div class="nhsuk-form-group{% if errors['pay-for'] %} nhsuk-form-group--error{% endif %}">
+        <label class="nhsuk-label nhsuk-label--s" for="pay-for">What is the payment for?</label>
+        <div class="nhsuk-hint" id="pay-for-hint">For example, ink cartridge for printer. This shows on the student record.</div>
+        {% if errors['pay-for'] %}<span class="nhsuk-error-message" id="pay-for-error"><span class="nhsuk-u-visually-hidden">Error:</span> {{ errors['pay-for'] }}</span>{% endif %}
+        <input class="nhsuk-input{% if errors['pay-for'] %} nhsuk-input--error{% endif %}" id="pay-for" name="pay-for" type="text" aria-describedby="pay-for-hint{% if errors['pay-for'] %} pay-for-error{% endif %}" value="{{ data['pay-for'] }}">
+      </div>
+
+      <button class="nhsuk-button" type="submit" data-module="nhsuk-button">Continue</button>
+    </form>
+
+    <p><a href="/internal/v1/student-details">Cancel</a></p>
+
+  </div>
+</div>
+{% endblock %}

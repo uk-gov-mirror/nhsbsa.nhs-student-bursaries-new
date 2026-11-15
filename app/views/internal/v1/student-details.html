@@ -106,15 +106,10 @@
           <div class="nhsuk-grid-column-one-third">
             <h2 class="nhsuk-heading-m">Activities</h2>
 
-            <div class="nhsuk-action-link">
-              <a class="nhsuk-action-link__link" href="/internal/studentDetails/viewDocuments?studentId=89" id="viewDocuments">
-                <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
-                </svg>
-                <span class="nhsuk-action-link__text">View documents</span>
-              </a>
-            </div>
+            <a class="nhsuk-action-link" href="/internal/studentDetails/viewDocuments?studentId=89" id="viewDocuments">
+              <svg class="nhsuk-icon nhsuk-icon--arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="M12 2a10 10 0 0 0-10 9h11.7l-4-4a1 1 0 0 1 1.5-1.4l5.6 5.7a1 1 0 0 1 0 1.4l-5.6 5.7a1 1 0 0 1-1.5 0 1 1 0 0 1 0-1.4l4-4H2A10 10 0 1 0 12 2z"/></svg>
+              <span class="nhsuk-action-link__text">View documents</span>
+            </a>
           </div>
 
           <div class="nhsuk-grid-column-two-thirds">
@@ -128,19 +123,19 @@
               <div class="nhsuk-details__text">
                 <dl class="nhsuk-summary-list">
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Date created</dt>
-                    <dd class="nhsuk-summary-list__value">7 April 2025 at 5:07pm</dd>
+                    <dt class="nhsuk-summary-list__key">Date created:</dt>
+                    <dd class="nhsuk-summary-list__value">07/04/2025 17:07:58</dd>
                   </div>
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Date last updated</dt>
-                    <dd class="nhsuk-summary-list__value">23 February 2026 at 12:15pm</dd>
+                    <dt class="nhsuk-summary-list__key">Date last updated:</dt>
+                    <dd class="nhsuk-summary-list__value">23/02/2026 12:15:11</dd>
                   </div>
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Last updated by</dt>
+                    <dt class="nhsuk-summary-list__key">Last updated by:</dt>
                     <dd class="nhsuk-summary-list__value">Michael Lee</dd>
                   </div>
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Cipher</dt>
+                    <dt class="nhsuk-summary-list__key">Cipher:</dt>
                     <dd class="nhsuk-summary-list__value">michael.lee7@nhs.net</dd>
                   </div>
                 </dl>
@@ -164,27 +159,31 @@
               <div class="nhsuk-details__text">
                 <dl class="nhsuk-summary-list">
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Date created</dt>
-                    <dd class="nhsuk-summary-list__value">24 September 2026 at 2:41pm</dd>
+                    <dt class="nhsuk-summary-list__key">Date created:</dt>
+                    <dd class="nhsuk-summary-list__value">24/09/2026 14:41:07</dd>
                   </div>
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Date last updated</dt>
-                    <dd class="nhsuk-summary-list__value">24 September 2026 at 2:41pm</dd>
+                    <dt class="nhsuk-summary-list__key">Date last updated:</dt>
+                    <dd class="nhsuk-summary-list__value">24/09/2026 14:41:07</dd>
                   </div>
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Last updated by</dt>
+                    <dt class="nhsuk-summary-list__key">Last updated by:</dt>
                     <dd class="nhsuk-summary-list__value">John Mark</dd>
                   </div>
                   <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
-                    <dt class="nhsuk-summary-list__key">Cipher</dt>
+                    <dt class="nhsuk-summary-list__key">Cipher:</dt>
                     <dd class="nhsuk-summary-list__value">testenvironment277+333@gmail.com</dd>
                   </div>
                 </dl>
 
-                {% if data['dsa-receipt'] == "closed" %}
-                  <p class="nhsuk-u-margin-bottom-0"><a href="student-details?dsa-receipt=null">Activate</a></p>
+                {% if data['locked'] == "true" %}
+                  {% if data['dsa-receipt'] == "closed" %}
+                    <p class="nhsuk-u-margin-bottom-0"><a href="student-details?dsa-receipt=null">Activate</a></p>
+                  {% else %}
+                    <a href="dsa/receipts" class="nhsuk-button nhsuk-u-margin-bottom-0" data-module="nhsuk-button">Assess<span class="nhsuk-u-visually-hidden"> DSA receipts</span></a>
+                  {% endif %}
                 {% else %}
-                  <p class="nhsuk-u-margin-bottom-0"><a id="viewActivity0" href="dsa/receipts">View<span class="nhsuk-u-visually-hidden"> DSA receipts</span></a></p>
+                  <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Lock the record to assess this activity.</p>
                 {% endif %}
               </div>
             </details>
@@ -215,6 +214,15 @@
                 </tr>
               </thead>
               <tbody class="nhsuk-table__body">
+                {% for note in data['dsa-notes'] or [] %}
+                <tr class="nhsuk-table__row">
+                  <td class="nhsuk-table__cell">
+                    <h3 class="nhsuk-heading-xs nhsuk-u-margin-bottom-2">{{ note.title }}</h3>
+                    <p>{{ note.text }}</p>
+                    <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Last modified by <strong>{{ note.by }}</strong></p>
+                  </td>
+                </tr>
+                {% endfor %}
                 {% if data['needs'] == "email" and (data['dsa'] == "needs" or data['dsa'] == "evidence" or data['dsa'] == "reject") %}
                 <tr class="nhsuk-table__row">
                   <td class="nhsuk-table__cell">
@@ -231,7 +239,7 @@
                     <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Last modified by <strong>Michael Lee</strong></p>
                   </td>
                 </tr>
-                {% else %}
+                {% elif not ((data['dsa-notes'] or []) | length) %}
                 <tr class="nhsuk-table__row">
                   <td class="nhsuk-table__cell">No notes yet.</td>
                 </tr>
@@ -308,21 +316,16 @@
           </tbody>
         </table>
 
-        <div class="nhsuk-action-link">
-          <a class="nhsuk-action-link__link" href="/internal/payments/paymentDetails?studentId=89" id="paymentButton">
-            <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
-              <path d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
-            </svg>
-            <span class="nhsuk-action-link__text">Manage payments</span>
-          </a>
-        </div>
+        <a class="nhsuk-action-link" href="/internal/payments/paymentDetails?studentId=89" id="paymentButton">
+          <svg class="nhsuk-icon nhsuk-icon--arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="M12 2a10 10 0 0 0-10 9h11.7l-4-4a1 1 0 0 1 1.5-1.4l5.6 5.7a1 1 0 0 1 0 1.4l-5.6 5.7a1 1 0 0 1-1.5 0 1 1 0 0 1 0-1.4l4-4H2A10 10 0 1 0 12 2z"/></svg>
+          <span class="nhsuk-action-link__text">Manage payments</span>
+        </a>
       </div>
 
       {# ---------- DSA allowances ---------- #}
+      {# dsaRows and dsaTotals are worked out in _routes.js #}
       <div class="nhsuk-tabs__panel nhsuk-tabs__panel--hidden" id="tab-dsa">
-        {% set dsaRows = data['allowances'] or [] %}
-        {% set dsaTotal = dsaRows | sum('amount') %}
+        {% set dsaRows = dsaRows or [] %}
 
         <h2 class="nhsuk-heading-m">DSA allowances</h2>
 
@@ -362,38 +365,43 @@
                 <th class="nhsuk-table__header" scope="col">Details</th>
                 <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Approved</th>
                 <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Used</th>
-                <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Remaining</th>
+                <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Left</th>
                 <th class="nhsuk-table__header nhsuk-table__header--numeric" scope="col">Hours or journeys left</th>
+                <th class="nhsuk-table__header" scope="col">Actions</th>
               </tr>
             </thead>
             <tbody class="nhsuk-table__body">
-              {% for item in dsaRows %}
+              {% for row in dsaRows %}
               <tr class="nhsuk-table__row">
-                <td class="nhsuk-table__cell">{{ item.label }}</td>
-                <td class="nhsuk-table__cell">{{ item.details or "None" }}</td>
-                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ item.amountDisplay }}</td>
-                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">£0.00</td>
-                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ item.amountDisplay }}</td>
-                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">
-                  {% if item.hours %}{{ item.hours }} of {{ item.hours }} hours{% elif item.journeys %}{{ item.journeys }} of {{ item.journeys }} journeys{% else %}Not applicable{% endif %}
-                </td>
+                <td class="nhsuk-table__cell">{{ row.label }}</td>
+                <td class="nhsuk-table__cell">{{ row.details or "None" }}{% if row.rateDisplay %}<br>{{ row.rateDisplay }} an hour{% endif %}</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ row.amountDisplay }}</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ row.usedDisplay }}</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ row.leftDisplay }}</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric">{{ row.unitsLeft }}</td>
+                <td class="nhsuk-table__cell"><a href="/internal/v1/dsa/payment-history/{{ row.index }}">View payments<span class="nhsuk-u-visually-hidden"> for {{ row.name }}</span></a></td>
               </tr>
               {% endfor %}
               <tr class="nhsuk-table__row">
                 <th class="nhsuk-table__header" scope="row">Total</th>
                 <td class="nhsuk-table__cell"></td>
-                <td class="nhsuk-table__cell nhsuk-table__cell--numeric"><strong>£{{ dsaTotal.toLocaleString('en-GB', {"minimumFractionDigits": 2, "maximumFractionDigits": 2}) }}</strong></td>
-                <td class="nhsuk-table__cell nhsuk-table__cell--numeric"><strong>£0.00</strong></td>
-                <td class="nhsuk-table__cell nhsuk-table__cell--numeric"><strong>£{{ dsaTotal.toLocaleString('en-GB', {"minimumFractionDigits": 2, "maximumFractionDigits": 2}) }}</strong></td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric"><strong>{{ dsaTotals.approved }}</strong></td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric"><strong>{{ dsaTotals.used }}</strong></td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric"><strong>{{ dsaTotals.left }}</strong></td>
+                <td class="nhsuk-table__cell"></td>
                 <td class="nhsuk-table__cell"></td>
               </tr>
             </tbody>
           </table>
 
-          <h3 class="nhsuk-heading-s">Payments made</h3>
-          <p>No payments recorded yet.</p>
+          <h3 class="nhsuk-heading-s">Invoice sent by email?</h3>
+          <p>Use this for invoices sent straight to the DSA inbox, for example from a taxi company or a non-medical helper. Receipts the student uploads are paid from the Activities tab.</p>
+          {% if data['locked'] == 'true' %}
+            <a href="/internal/v1/dsa/payment-email" class="nhsuk-button nhsuk-button--secondary" data-module="nhsuk-button">Add payment from an emailed invoice</a>
+          {% else %}
+            <p class="nhsuk-hint">Lock the record to add a payment.</p>
+          {% endif %}
 
-          <a href="#" class="nhsuk-button" data-module="nhsuk-button">Record a payment</a>
           <p class="nhsuk-u-margin-bottom-0"><a href="/internal/v1/dsa/allowances">Change allowances</a></p>
 
         {% else %}
@@ -408,15 +416,10 @@
       <div class="nhsuk-tabs__panel nhsuk-tabs__panel--hidden" id="tab-5">
         <h2 class="nhsuk-heading-m">Actions</h2>
 
-        <div class="nhsuk-action-link">
-          <a class="nhsuk-action-link__link" href="/internal/studentDetails/sendEmail?studentId=89" id="sendGeneralEmail">
-            <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
-              <path d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
-            </svg>
-            <span class="nhsuk-action-link__text">Send custom email</span>
-          </a>
-        </div>
+        <a class="nhsuk-action-link" href="/internal/studentDetails/sendEmail?studentId=89" id="sendGeneralEmail">
+          <svg class="nhsuk-icon nhsuk-icon--arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="M12 2a10 10 0 0 0-10 9h11.7l-4-4a1 1 0 0 1 1.5-1.4l5.6 5.7a1 1 0 0 1 0 1.4l-5.6 5.7a1 1 0 0 1-1.5 0 1 1 0 0 1 0-1.4l4-4H2A10 10 0 1 0 12 2z"/></svg>
+          <span class="nhsuk-action-link__text">Send custom email</span>
+        </a>
       </div>
 
     </div>

@@ -1,0 +1,47 @@
+{% extends "layout-internal.html" %}
+
+{% set pageName = "Payment added" %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <div class="nhsuk-panel">
+      <h1 class="nhsuk-panel__heading">Payment added</h1>
+      <div class="nhsuk-panel__body">{{ p.amountDisplay }} has been taken off the allowance</div>
+    </div>
+
+    <h2 class="nhsuk-heading-m">{{ p.allowanceName }}</h2>
+
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Left in this allowance</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.leftSummary }}</dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Paid to</dt>
+        <dd class="nhsuk-summary-list__value">{{ p.paidTo }}</dd>
+      </div>
+    </dl>
+
+    <h2 class="nhsuk-heading-m">What happens next</h2>
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      {% if p.source == 'email' %}
+      <li>Pay invoice {{ p.invoice }} to {{ p.from }} in Integra (supplier reference {{ p.integra }}), if you have not already.</li>
+      {% else %}
+      <li>{{ p.amountDisplay }} will be paid to John Mark's bank account in the next payment run.</li>
+      <li>The payment is listed as {{ p.paymentType }} under One off payments on the Payment details page.</li>
+      <li>The DSA receipts activity is marked as complete.</li>
+      {% endif %}
+      <li>The DSA allowances tab shows the new balance and the payment.</li>
+      <li>A note has been added to the Notes tab.</li>
+    </ul>
+
+    <a href="/internal/v1/student-details#tab-dsa" class="nhsuk-button" data-module="nhsuk-button">Return to student record</a>
+
+  </div>
+</div>
+{% endblock %}

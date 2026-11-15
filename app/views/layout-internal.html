@@ -54,6 +54,27 @@
 <!-- Edit the footer -->
 <!-- Footer code examples can be found at https://service-manual.nhs.uk/design-system/components/footer -->
 {% block footer %}
+  {#
+    CHANGE: Reset data link (updated 15 November 2026)
+
+    OLD LINE (no longer used):
+      href: "/prototype-admin/reset?returnPage=" + (currentPage | urlencode),
+
+    WHY THE OLD LINE WAS REPLACED:
+      After resetting the data, "Return" took you back to the page you were on
+      (for example the student record DSA allowances tab). That page needs
+      allowances and session data, which the reset has just cleared.
+
+    NEW LINE:
+      href: "/prototype-admin/reset?returnPage=/",
+
+    WHAT IT DOES NOW:
+      After resetting the data, "Return" always goes to the home page (index page).
+
+    NOTE:
+      This layout is shared by v0 and v1, so this change applies to both.
+      To undo it, swap the new line below back to the old line above.
+  #}
   {{ footer({
     meta: {
       items: [
@@ -66,7 +87,7 @@
           text: "Page templates"
         },
         {
-          href: "/prototype-admin/reset?returnPage=" + (currentPage | urlencode),
+          href: "/prototype-admin/reset?returnPage=/",
           text: "Reset data"
         }
       ]

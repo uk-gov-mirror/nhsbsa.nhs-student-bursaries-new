@@ -1,59 +1,98 @@
-" style="margin-bottom: 0;"{% extends "layout-internal.html" %}
+{% extends "layout-internal.html" %}
 
-{% set pageName = "Page templates" %}
+{% set pageName = "DSA receipts" %}
+{% set hasError = data['receipt-decision-error'] == 'true' %}
 
 {% block beforeContent %}
+  <a class="nhsuk-back-link" href="/internal/v1/student-details">Back</a>
 {% endblock %}
 
 {% block content %}
 <div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-    <h1 class="nhsuk-app-heading">
-      <span class="nhsuk-caption-l">Disabled students&rsquo; allowance</span> Disabled Students&rsquo; Allowance Receipts
+  <div class="nhsuk-grid-column-two-thirds">
+
+    {% if hasError %}
+    <div class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
+      <h2 class="nhsuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+      <div class="nhsuk-error-summary__body">
+        <ul class="nhsuk-list nhsuk-error-summary__list">
+          <li><a href="#receipt-decision-accept">Select your decision</a></li>
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+
+    <h1 class="nhsuk-heading-l">
+      <span class="nhsuk-caption-l">John Mark BRN0000089<span class="nhsuk-u-visually-hidden"> - </span></span>
+      DSA receipts
     </h1>
 
-    <div class="nhsuk-table__panel-with-heading-tab">
-      <h2 class="nhsuk-table__heading-tab">Evidence uploaded</h2>
-      <table role="table" class="nhsuk-table-responsive"  id="documentListTable">
-          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Evidence uploaded</caption>
-          <thead role="rowgroup" class="nhsuk-table__head">
-            <tr role="row">
-                <th role="columnheader" class="" scope="col">Type</th>
-                <th role="columnheader" class="" scope="col">Upload date</th>
-                <th role="columnheader" class="" scope="col">View</th>
-            </tr>
-          </thead>
-          <tbody class="nhsuk-table__body">
-            <tr role="row" class="nhsuk-table__row" id="documentListTableRow">
-              <td role="cell" class="nhsuk-table__cell">
-              <input type="hidden" id="documents0.id" name="documents[0].id" value=""></input>
-              <input type="hidden" id="documents0.created" name="documents[0].created" value=""></input>
-              <input type="hidden" id="documents0.documentType.Name" name="documents[0].documentType.Name" value=""></input>
-              <input type="hidden" id="documents0.fileAvailable" name="documents[0].fileAvailable" value="false"></input>
-              <span>DSA equipment receipt</span>
-            </td>
-              <td role="cell" class="nhsuk-table__cell">
-              <span>24-September-2026 14:41</span>
-            </td>
-                <td role="cell" class="nhsuk-table__cell">
-                  <a id="document0"
-                href="#"
-                target="_blank">View<span class="nhsuk-u-visually-hidden"> DSA equipment receipt File 0(Opens in a new tab)</span></a>
-                </td>
-                <td role="cell" class="nhsuk-table__cell">
-                </td>
-              </tr>
-            </tbody>
-      </table>
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Activity</dt>
+        <dd class="nhsuk-summary-list__value">375 - DSA receipts</dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Sent by student</dt>
+        <dd class="nhsuk-summary-list__value">24/09/2026 14:41:07</dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">What it's for</dt>
+        <dd class="nhsuk-summary-list__value">Ink cartridge for printer</dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Amount claimed</dt>
+        <dd class="nhsuk-summary-list__value">£25.00</dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Receipt</dt>
+        <dd class="nhsuk-summary-list__value"><a href="#" target="_blank" rel="noopener noreferrer">Ink cartridge receipt (opens in new tab)</a></dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Status</dt>
+        <dd class="nhsuk-summary-list__value"><strong class="nhsuk-tag nhsuk-tag--blue">Active</strong></dd>
+      </div>
+    </dl>
+
+    <div class="nhsuk-inset-text">
+      <span class="nhsuk-u-visually-hidden">Information: </span>
+      <p>Open the receipt and check the amount matches what the student has claimed.</p>
     </div>
 
-    <div class="nhsuk-form-group">
-      <a href="../student-details?dsa-receipt=closed" class="nhsuk-button nhsuk-button--primary">Close activity</a>
-    </div>
+    <form method="post" novalidate>
+      <div class="nhsuk-form-group{% if hasError %} nhsuk-form-group--error{% endif %}">
+        <fieldset class="nhsuk-fieldset"{% if hasError %} aria-describedby="receipt-decision-error"{% endif %}>
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+            <h2 class="nhsuk-fieldset__heading">What is your decision?</h2>
+          </legend>
+          {% if hasError %}
+          <span class="nhsuk-error-message" id="receipt-decision-error"><span class="nhsuk-u-visually-hidden">Error:</span> Select your decision</span>
+          {% endif %}
+          <div class="nhsuk-radios">
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="receipt-decision-accept" name="receipt-decision" type="radio" value="accept" aria-describedby="receipt-decision-accept-hint"{% if data['receipt-decision'] == 'accept' %} checked{% endif %}>
+              <label class="nhsuk-label nhsuk-radios__label" for="receipt-decision-accept">Accept and add payment</label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="receipt-decision-accept-hint">The receipt is clear and DSA can pay for it.</div>
+            </div>
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="receipt-decision-more-info" name="receipt-decision" type="radio" value="more-info" aria-describedby="receipt-decision-more-info-hint"{% if data['receipt-decision'] == 'more-info' %} checked{% endif %}>
+              <label class="nhsuk-label nhsuk-radios__label" for="receipt-decision-more-info">Ask for more information</label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="receipt-decision-more-info-hint">For example, the receipt is not clear or the amount does not match.</div>
+            </div>
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="receipt-decision-reject" name="receipt-decision" type="radio" value="reject" aria-describedby="receipt-decision-reject-hint"{% if data['receipt-decision'] == 'reject' %} checked{% endif %}>
+              <label class="nhsuk-label nhsuk-radios__label" for="receipt-decision-reject">Reject</label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="receipt-decision-reject-hint">DSA cannot pay for this. You will email the student to explain why.</div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
 
-    <a href="../student-details" id="cancel-link">Cancel</a>
-	</div>
+      <button class="nhsuk-button" type="submit" data-module="nhsuk-button">Continue</button>
+    </form>
+
+    <p><a href="/internal/v1/student-details">Return to student record</a></p>
+
+  </div>
 </div>
-
-
 {% endblock %}

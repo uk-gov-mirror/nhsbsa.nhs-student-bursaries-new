@@ -1,0 +1,88 @@
+{% extends "layout-internal.html" %}
+
+{% set pageName = "Payments for " + a.name %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="/internal/v1/student-details#tab-dsa">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-l">
+      <span class="nhsuk-caption-l">John Mark BRN0000089<span class="nhsuk-u-visually-hidden"> - </span></span>
+      Payments for {{ a.name }}
+    </h1>
+
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Payment type</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.paymentType }}</dd>
+      </div>
+      {% if a.hours %}
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Hourly rate</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.rateDisplay }}</dd>
+      </div>
+      {% endif %}
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Approved</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.amountDisplay }}{% if a.hours %} and {{ a.hours }} hours{% elif a.journeys %} and {{ a.journeys }} journeys{% endif %}</dd>
+      </div>
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Left</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.leftSummary }}</dd>
+      </div>
+      {% if a.hours %}
+      <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+        <dt class="nhsuk-summary-list__key">Missed sessions this term</dt>
+        <dd class="nhsuk-summary-list__value">{{ a.missedThisTerm }} of {{ limit }} used ({{ term }})</dd>
+      </div>
+      {% endif %}
+    </dl>
+
+    {% if history | length %}
+    <table role="table" class="nhsuk-table-responsive">
+      <caption class="nhsuk-table__caption nhsuk-table__caption--m">Payments</caption>
+      <thead role="rowgroup" class="nhsuk-table__head">
+        <tr role="row">
+          <th role="columnheader" scope="col">Date added</th>
+          <th role="columnheader" scope="col">Invoice number</th>
+          <th role="columnheader" scope="col">What it's for</th>
+          {% if a.hours %}<th role="columnheader" scope="col">Hours</th><th role="columnheader" scope="col">Missed session</th>{% endif %}
+          {% if a.journeys %}<th role="columnheader" scope="col">Journeys</th>{% endif %}
+          <th role="columnheader" scope="col">Paid to</th>
+          <th role="columnheader" class="nhsuk-table__header--numeric" scope="col">Amount</th>
+          <th role="columnheader" class="nhsuk-table__header--numeric" scope="col">Balance after</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        {% for p in history %}
+        <tr role="row" class="nhsuk-table__row">
+          <td role="cell" class="nhsuk-table__cell"><span class="nhsuk-table-responsive__heading">Date added </span>{{ p.date }}</td>
+          <td role="cell" class="nhsuk-table__cell"><span class="nhsuk-table-responsive__heading">Invoice number </span>{{ p.invoice }}</td>
+          <td role="cell" class="nhsuk-table__cell"><span class="nhsuk-table-responsive__heading">What it's for </span>{{ p.whatFor }}</td>
+          {% if a.hours %}
+          <td role="cell" class="nhsuk-table__cell"><span class="nhsuk-table-responsive__heading">Hours </span>{{ p.unitsText }}</td>
+          <td role="cell" class="nhsuk-table__cell"><span class="nhsuk-table-responsive__heading">Missed session </span>{{ "Yes" if p.missed == 'yes' else "No" }}</td>
+          {% endif %}
+          {% if a.journeys %}
+          <td role="cell" class="nhsuk-table__cell"><span class="nhsuk-table-responsive__heading">Journeys </span>{{ p.unitsText }}</td>
+          {% endif %}
+          <td role="cell" class="nhsuk-table__cell"><span class="nhsuk-table-responsive__heading">Paid to </span>{{ p.paidToShort }}</td>
+          <td role="cell" class="nhsuk-table__cell nhsuk-table__cell--numeric"><span class="nhsuk-table-responsive__heading">Amount </span>{{ p.amountDisplay }}</td>
+          <td role="cell" class="nhsuk-table__cell nhsuk-table__cell--numeric"><span class="nhsuk-table-responsive__heading">Balance after </span>{{ p.balanceAfter }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No payments have been added for this allowance yet.</p>
+    {% endif %}
+
+    <a href="/internal/v1/student-details#tab-dsa" class="nhsuk-button nhsuk-button--secondary" data-module="nhsuk-button">Return to student record</a>
+
+  </div>
+</div>
+{% endblock %}
